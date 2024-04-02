@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Banner" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 设置状态栏颜色为透明 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- 其他主题设置 -->
+    </style>
+</resources>
