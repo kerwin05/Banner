@@ -1,11 +1,14 @@
 package com.example.banner.model
 
+import com.example.banner.App
+import com.example.banner.utils.IpUtils
+
 data class BannerModel(
     var img: Int,
     var id: String = "MTS-100SY-5098",
-    var pass: String = "PASS:00001111(04:14)",
-    var wifi: String = "192.168.43.1",
-    var lan: String = "192.168.3.61/N/A"
+    var pass: String = "00001111(04:14)",
+    var wifi: String = IpUtils.getWifiIpAddress(App.mContext),
+    var lan: String = IpUtils.getLanIpAddress()
 ) {
 
     fun showId() :String = "ID:$id"
