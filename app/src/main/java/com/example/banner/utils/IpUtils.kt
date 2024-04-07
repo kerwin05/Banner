@@ -79,14 +79,19 @@ object IpUtils {
             manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET) ?: return ""
         if (ni.isConnected) {
             try {
-                for (nif in Collections.list(NetworkInterface.getNetworkInterfaces())) {
-                    if (!nif.name.startsWith("eth")) continue
-                    for (inetAddress in Collections.list(nif.inetAddresses)) {
-                        if (inetAddress.isLoopbackAddress) continue
-                        if (inetAddress is Inet4Address) {
-                            return inetAddress.getHostAddress()
+                val networkInterfaces = NetworkInterface.getNetworkInterfaces()
+                if (networkInterfaces != null) {
+                    for (nif in Collections.list(networkInterfaces)) {
+                        if (!nif.name.startsWith("eth")) continue
+                        for (inetAddress in Collections.list(nif.inetAddresses)) {
+                            if (inetAddress.isLoopbackAddress) continue
+                            if (inetAddress is Inet4Address) {
+                                return inetAddress.hostAddress
+                            }
                         }
                     }
+                } else {
+                    // 处理获取网络接口失败的情况
                 }
             } catch (e: SocketException) {
                 e.printStackTrace()
