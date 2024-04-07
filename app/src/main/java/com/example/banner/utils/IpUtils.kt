@@ -3,10 +3,15 @@ package com.example.banner.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.os.Build
 import android.util.Log
+import com.example.banner.App
+import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.NetworkInterface
+import java.net.SocketException
+import java.util.Collections
 
 object IpUtils {
 
@@ -65,6 +70,28 @@ object IpUtils {
             Log.e("IP Address", "Failed to get LAN IP address", e)
         }
 
+        return ""
+    }
+
+    fun getLanIp(): String {
+        val manager = App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val ni: NetworkInfo =
+            manager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET) ?: return ""
+        if (ni.isConnected) {
+            try {
+                for (nif in Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                    if (!nif.name.startsWith("eth")) continue
+                    for (inetAddress in Collections.list(nif.inetAddresses)) {
+                        if (inetAddress.isLoopbackAddress) continue
+                        if (inetAddress is Inet4Address) {
+                            return inetAddress.getHostAddress()
+                        }
+                    }
+                }
+            } catch (e: SocketException) {
+                e.printStackTrace()
+            }
+        }
         return ""
     }
 
