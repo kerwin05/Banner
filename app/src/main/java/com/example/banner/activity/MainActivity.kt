@@ -2,10 +2,13 @@ package com.example.banner.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import com.blankj.utilcode.util.NetworkUtils
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
 import com.example.banner.model.BannerModel
+import com.example.banner.utils.log
 import com.zhpan.bannerview.transform.toPx
 
 class MainActivity : AppCompatActivity() {
@@ -42,8 +45,9 @@ class MainActivity : AppCompatActivity() {
             )
         }.create(mBanners)
 
+        binding.tv.isVisible = false
         binding.tv.setOnClickListener {
-
+            "NetworkUtils.getSSID():${NetworkUtils.getSSID()}".log()
         }
     }
 

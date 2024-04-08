@@ -5,8 +5,8 @@ import com.example.banner.utils.IpUtils
 
 data class BannerModel(
     var img: Int,
-    var id: String = "MTS-100SY-5098",
-    var pass: String = "00001111(04:14)",
+    var id: String = NetworkUtils.getSSID(),
+    var pass: String = "-----------",
     var wifi: String = NetworkUtils.getIpAddressByWifi(),
     var lan: String = IpUtils.getLanIp()
 ) {

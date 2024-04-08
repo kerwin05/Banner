@@ -14,7 +14,6 @@
         android:id="@+id/tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="123456"
-        android:visibility="invisible"/>
+        android:text="123456"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
