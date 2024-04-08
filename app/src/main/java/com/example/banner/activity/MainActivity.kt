@@ -3,14 +3,15 @@ package com.example.banner.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.blankj.utilcode.util.NetworkUtils
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
 import com.example.banner.model.BannerModel
-import com.example.banner.utils.IpUtils
-import com.example.banner.utils.log
+import com.example.banner.utils.eventbus.NetworkEvent
 import com.zhpan.bannerview.transform.toPx
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        EventBus.getDefault().register(this)
 
         initData()
     }
@@ -48,38 +50,44 @@ class MainActivity : AppCompatActivity() {
 
         binding.tv.isVisible = false
 
-        NetworkUtils.getIPAddressAsync(true) {
-            "NetworkUtils.getIPAddressAsync(true):$it".log()
-        }
-        "NetworkUtils.getIpAddressByWifi():${NetworkUtils.getIpAddressByWifi()}".log()
-        "NetworkUtils.getGatewayByWifi():${NetworkUtils.getGatewayByWifi()}".log()
-        "NetworkUtils.getNetMaskByWifi():${NetworkUtils.getNetMaskByWifi()}".log()
-        "NetworkUtils.getServerAddressByWifi():${NetworkUtils.getServerAddressByWifi()}".log()
-        "NetworkUtils IpUtils.getLocalIpAddress():${IpUtils.getLocalIpAddress()}".log()
-
     }
 
     private fun initData() {
         mBanners.add(
             BannerModel(
                 R.drawable.image1
-            )
+            ).apply { refreshIp() }
         )
         mBanners.add(
             BannerModel(
                 R.drawable.image2
-            )
+            ).apply { refreshIp() }
         )
         mBanners.add(
             BannerModel(
                 R.drawable.image3
-            )
+            ).apply { refreshIp() }
         )
         mBanners.add(
             BannerModel(
                 R.drawable.image4
-            )
+            ).apply { refreshIp() }
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun rcvMsg(event: NetworkEvent) {
+        mBanners.forEach {  model ->
+            model.refreshIp()
+        }
+        val cur = binding.banner.currentItem
+        binding.banner.refreshData(mBanners)
+        binding.banner.setCurrentItem(cur, false)
     }
 
 }

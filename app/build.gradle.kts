@@ -62,4 +62,5 @@ dependencies {
     implementation("com.github.zhpanvip:BannerViewPager:3.1.5")
     implementation("com.blankj:utilcodex:1.30.6")
     implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("org.greenrobot:eventbus:3.3.1")
 }
