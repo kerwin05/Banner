@@ -1,6 +1,9 @@
 package com.example.banner
 
 import android.app.Application
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import com.example.banner.utils.NetworkChangeReceiver
 import com.example.banner.utils.timberInit
 
 class App: Application() {
@@ -12,11 +15,17 @@ class App: Application() {
         }
     }
 
+    private val networkChangeReceiver = NetworkChangeReceiver()
+
     override fun onCreate() {
         super.onCreate()
         mContext = this
 
         timberInit()
+
+        //网络环境监听
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkChangeReceiver, intentFilter)
     }
 
 }

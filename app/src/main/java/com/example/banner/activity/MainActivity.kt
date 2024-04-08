@@ -3,6 +3,7 @@ package com.example.banner.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.blankj.utilcode.util.NetworkUtils
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.image4
             ).apply { refreshIp() }
         )
+        refreshBannerIp()
     }
 
     override fun onDestroy() {
@@ -82,12 +84,18 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun rcvMsg(event: NetworkEvent) {
-        mBanners.forEach {  model ->
-            model.refreshIp()
+        refreshBannerIp()
+    }
+
+    private fun refreshBannerIp() {
+        NetworkUtils.getIPAddressAsync(true) {
+            mBanners.forEach {  model ->
+                model.refreshIp(it)
+            }
+            val cur = binding.banner.currentItem
+            binding.banner.refreshData(mBanners)
+            binding.banner.setCurrentItem(cur, false)
         }
-        val cur = binding.banner.currentItem
-        binding.banner.refreshData(mBanners)
-        binding.banner.setCurrentItem(cur, false)
     }
 
 }

@@ -16,11 +16,9 @@ data class BannerModel(
     fun showWifi(): String = "Wifi Ip:$wifi"
     fun showLan(): String = "Lan Ip:$lan"
 
-    fun refreshIp() {
+    fun refreshIp(lan: String = "") {
         wifi = IpUtils.getLocalIpAddress()
-        NetworkUtils.getIPAddressAsync(true) {
-            lan = it
-        }
+        this.lan = lan
     }
 
 }
