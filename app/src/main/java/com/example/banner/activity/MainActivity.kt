@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity() {
                 resources.getColor(R.color.black, null)
             )
         }.create(mBanners)
+
+        binding.tv.setOnClickListener {
+
+        }
     }
 
     private fun initData() {

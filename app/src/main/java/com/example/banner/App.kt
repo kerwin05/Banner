@@ -1,6 +1,7 @@
 package com.example.banner
 
 import android.app.Application
+import com.example.banner.utils.timberInit
 
 class App: Application() {
 
@@ -14,6 +15,8 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         mContext = this
+
+        timberInit()
     }
 
 }
