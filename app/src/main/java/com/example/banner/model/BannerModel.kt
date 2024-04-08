@@ -7,7 +7,7 @@ data class BannerModel(
     var img: Int,
     var id: String = NetworkUtils.getSSID(),
     var pass: String = "-----------",
-    var wifi: String = NetworkUtils.getIpAddressByWifi(),
+    var wifi: String = IpUtils.getWifiIpAddress(),
     var lan: String = IpUtils.getLanIp()
 ) {
 

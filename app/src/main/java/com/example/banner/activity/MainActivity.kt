@@ -8,6 +8,7 @@ import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
 import com.example.banner.model.BannerModel
+import com.example.banner.utils.IpUtils
 import com.example.banner.utils.log
 import com.zhpan.bannerview.transform.toPx
 
@@ -46,9 +47,16 @@ class MainActivity : AppCompatActivity() {
         }.create(mBanners)
 
         binding.tv.isVisible = false
-        binding.tv.setOnClickListener {
-            "NetworkUtils.getSSID():${NetworkUtils.getSSID()}".log()
+
+        NetworkUtils.getIPAddressAsync(true) {
+            "NetworkUtils.getIPAddressAsync(true):$it".log()
         }
+        "NetworkUtils.getIpAddressByWifi():${NetworkUtils.getIpAddressByWifi()}".log()
+        "NetworkUtils.getGatewayByWifi():${NetworkUtils.getGatewayByWifi()}".log()
+        "NetworkUtils.getNetMaskByWifi():${NetworkUtils.getNetMaskByWifi()}".log()
+        "NetworkUtils.getServerAddressByWifi():${NetworkUtils.getServerAddressByWifi()}".log()
+        "NetworkUtils IpUtils.getLocalIpAddress():${IpUtils.getLocalIpAddress()}".log()
+
     }
 
     private fun initData() {

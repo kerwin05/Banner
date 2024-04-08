@@ -2,74 +2,51 @@ package com.example.banner.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import android.os.Build
-import android.util.Log
+import android.net.wifi.WifiManager
 import com.example.banner.App
 import java.net.Inet4Address
-import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.SocketException
 import java.util.Collections
 
 object IpUtils {
 
-    fun getWifiIpAddress(context: Context): String {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return ""
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return ""
-            if (!networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                return ""
-            }
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo ?: return ""
-            if (networkInfo.type != ConnectivityManager.TYPE_WIFI) {
-                return ""
-            }
-        }
+    fun getWifiIpAddress(): String {
+        val wifiManager = App.getContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = wifiManager.connectionInfo
+        val ipAddress = wifiInfo.ipAddress
 
-        try {
-            val networkInterfaces = NetworkInterface.getNetworkInterfaces()
-            if (networkInterfaces != null) {
-                while (networkInterfaces.hasMoreElements()) {
-                    val networkInterface = networkInterfaces.nextElement()
-                    val addresses = networkInterface.inetAddresses
-                    while (addresses.hasMoreElements()) {
-                        val address = addresses.nextElement()
-                        if (!address.isLoopbackAddress && address is InetAddress && address.hostAddress.indexOf(':') < 0) {
-                            return address.hostAddress
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("IP Address", "Failed to get Wi-Fi IP address", e)
-        }
+        // 将 IP 地址转换为字符串形式
+        val ipString = String.format(
+            "%d.%d.%d.%d",
+            ipAddress and 0xff,
+            ipAddress shr 8 and 0xff,
+            ipAddress shr 16 and 0xff,
+            ipAddress shr 24 and 0xff
+        )
 
-        return ""
+        return ipString
     }
 
-    fun getLanIpAddress(): String {
+    fun getLocalIpAddress(): String {
         try {
-            val networkInterfaces = NetworkInterface.getNetworkInterfaces()
-            if (networkInterfaces != null) {
-                while (networkInterfaces.hasMoreElements()) {
-                    val networkInterface = networkInterfaces.nextElement()
+            val interfaces = NetworkInterface.getNetworkInterfaces()
+            while (interfaces.hasMoreElements()) {
+                val networkInterface = interfaces.nextElement()
+                if (networkInterface.isUp && !networkInterface.isLoopback) {
                     val addresses = networkInterface.inetAddresses
                     while (addresses.hasMoreElements()) {
                         val address = addresses.nextElement()
-                        if (!address.isLoopbackAddress && address is InetAddress && address.hostAddress.indexOf(':') < 0) {
+                        if (!address.isLoopbackAddress && address.hostAddress.indexOf(':') < 0) {
                             return address.hostAddress
                         }
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e("IP Address", "Failed to get LAN IP address", e)
+            e.printStackTrace()
         }
-
         return ""
     }
 
