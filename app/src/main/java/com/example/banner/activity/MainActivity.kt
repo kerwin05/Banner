@@ -37,8 +37,13 @@ class MainActivity : AppCompatActivity() {
         initBanner()
 
         DeviceUtil.getIdAndPass { id, pass ->
-            "DeviceUtil id:${id}, pass:$pass".log()
+            "DeviceUtil getIdAndPass id:${id}, pass:$pass".log()
         }
+        DeviceUtil.getApSSIDAndPwd(this) { id, pass ->
+            "DeviceUtil getApSSIDAndPwd id:${id}, pass:$pass".log()
+        }
+        val getCurrentWifiInfo = DeviceUtil.getCurrentWifiInfo(this)
+        "DeviceUtil getCurrentWifiInfo id:${getCurrentWifiInfo.first}, pass:${getCurrentWifiInfo.second}".log()
     }
 
     private fun initBanner() {
@@ -98,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     private fun refreshBannerIp() {
         NetworkUtils.getIPAddressAsync(true) {
             //刷新Banner数据的Ip
-            mBanners.forEach {  model ->
+            mBanners.forEach { model ->
                 model.refreshIp(it)
             }
             //数据更新banner

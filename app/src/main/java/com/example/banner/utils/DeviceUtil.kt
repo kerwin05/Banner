@@ -4,9 +4,12 @@ import android.Manifest
 import android.content.Context
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
+import android.util.Log
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.example.banner.App
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 
 object DeviceUtil {
 
@@ -43,10 +46,80 @@ object DeviceUtil {
             override fun onDenied(deniedForever: MutableList<String>, denied: MutableList<String>) {
                 "DeviceUtil 无权限".log()
                 ToastUtils.showShort("DeviceUtil 无权限")
+                onBlock("", "")
             }
 
         })
 
+    }
+
+    private const val TAG = "DeviceUtil"
+
+    fun getApSSIDAndPwd(context: Context, onBlock: (id: String, pass: String) -> Unit) {
+        val mWifiConfig = getWifiConfiguration(context)
+        var ssid: String? = null
+        var pwd: String? = null
+
+        if (mWifiConfig != null) {
+            val fields: Array<Field> = mWifiConfig.javaClass.declaredFields
+            for (field in fields) {
+                try {
+                    if (field.name == "SSID") {
+                        ssid = field.get(mWifiConfig).toString()
+                        Log.e(TAG, "AP SSID = $ssid")
+                    } else if (field.name == "preSharedKey") {
+                        pwd = field.get(mWifiConfig).toString()
+                        Log.e(TAG, "AP pwd = $pwd")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e(TAG, "getApSSIDAndPwd()-->error:$e")
+                }
+            }
+        }
+
+        if (ssid == null) {
+            ssid = "Unknown"
+        }
+        if (pwd == null) {
+            pwd = "Unknown"
+        }
+
+        onBlock(ssid, pwd)
+    }
+
+    private fun getWifiConfiguration(context: Context): WifiConfiguration? {
+        var mWifiConfig: WifiConfiguration? = null
+        try {
+            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val method: Method = wifiManager.javaClass.getMethod("getWifiApConfiguration")
+            method.isAccessible = true
+            mWifiConfig = method.invoke(wifiManager) as WifiConfiguration
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return mWifiConfig
+    }
+
+    fun getCurrentWifiInfo(context: Context): Pair<String?, String?> {
+        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = wifiManager.connectionInfo
+        val networkId = wifiInfo.networkId
+
+        val configuredNetworks = wifiManager.configuredNetworks
+        for (config in configuredNetworks) {
+            if (config.networkId == networkId) {
+                val ssid = removeQuotes(config.SSID)
+                val preSharedKey = removeQuotes(config.preSharedKey)
+                return Pair(ssid, preSharedKey)
+            }
+        }
+
+        return Pair(null, null)
+    }
+
+    private fun removeQuotes(text: String?): String? {
+        return text?.removeSurrounding("\"")
     }
 
 }
