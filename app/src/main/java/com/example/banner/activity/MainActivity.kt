@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.NetworkUtils
 import com.blankj.utilcode.util.PermissionUtils
+import com.example.banner.App
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 refreshWifi()
             }
         }).request()
+
     }
 
     override fun onResume() {
@@ -83,7 +85,13 @@ class MainActivity : AppCompatActivity() {
             )
         }.create(mBanners)
 
-        binding.tv.isVisible = false
+//        binding.tv.isVisible = false
+        binding.tv.isVisible = true
+        binding.tv.setOnClickListener {
+            val id = DeviceUtil.getHotspotConfiguration(App.getContext())?.SSID?:""
+            val pass = DeviceUtil.getHotspotConfiguration(App.getContext())?.preSharedKey?:""
+            "DeviceUtil.getHotspotConfiguration id:$id, pass:$pass".log()
+        }
 
     }
 

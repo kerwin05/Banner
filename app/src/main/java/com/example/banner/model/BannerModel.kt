@@ -24,8 +24,8 @@ data class BannerModel(
     }
 
     fun refreshWifi() {
-        id = NetworkUtils.getSSID()
-        pass = DeviceUtil.getCurrentWifiInfo(App.getContext()).first.toString()
+        id = DeviceUtil.getHotspotConfiguration(App.getContext())?.SSID?:""
+        pass = DeviceUtil.getHotspotConfiguration(App.getContext())?.preSharedKey?:""
     }
 
 }
