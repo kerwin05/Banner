@@ -64,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         initBanner()
 
+        "DeviceUtil onResume ${android.os.Build.BRAND} ${android.os.Build.MODEL}".log()
+
     }
 
     private fun getDevices() {
@@ -85,8 +87,8 @@ class MainActivity : AppCompatActivity() {
             )
         }.create(mBanners)
 
-//        binding.tv.isVisible = false
-        binding.tv.isVisible = true
+        binding.tv.isVisible = false
+//        binding.tv.isVisible = true
         binding.tv.setOnClickListener {
             val id = DeviceUtil.getHotspotConfiguration(App.getContext())?.SSID?:""
             val pass = DeviceUtil.getHotspotConfiguration(App.getContext())?.preSharedKey?:""
