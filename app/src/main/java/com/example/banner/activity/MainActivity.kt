@@ -1,12 +1,9 @@
 package com.example.banner.activity
 
-import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.NetworkUtils
-import com.blankj.utilcode.util.PermissionUtils
-import com.example.banner.App
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
@@ -34,37 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         initData()
 
-        // 权限
-        PermissionUtils.permission(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION
-        ).callback(object : PermissionUtils.FullCallback {
-            override fun onGranted(permissionsGranted: List<String>) {
-                // 权限已授予
-                // 在这里处理定位权限已授权后的逻辑
-                getDevices()
-                refreshWifi()
-            }
-
-            override fun onDenied(
-                permissionsDeniedForever: List<String>,
-                permissionsDenied: List<String>
-            ) {
-                // 权限被拒绝
-                // 在这里处理定位权限被拒绝后的逻辑
-                getDevices()
-                refreshWifi()
-            }
-        }).request()
-
     }
 
     override fun onResume() {
         super.onResume()
         initBanner()
-
-        "DeviceUtil onResume ${android.os.Build.BRAND} ${android.os.Build.MODEL}".log()
 
     }
 
@@ -90,9 +61,7 @@ class MainActivity : AppCompatActivity() {
         binding.tv.isVisible = false
 //        binding.tv.isVisible = true
         binding.tv.setOnClickListener {
-            val id = DeviceUtil.getHotspotConfiguration(App.getContext())?.SSID?:""
-            val pass = DeviceUtil.getHotspotConfiguration(App.getContext())?.preSharedKey?:""
-            "DeviceUtil.getHotspotConfiguration id:$id, pass:$pass".log()
+
         }
 
     }

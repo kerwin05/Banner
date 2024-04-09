@@ -6,10 +6,25 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.example.banner.utils.eventbus.NetworkEvent
+import com.example.banner.utils.log
 import org.greenrobot.eventbus.EventBus
 
 class NetworkChangeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+
+        val action = intent.action
+        "BroadcastReceiver:$action".log()
+        when(action) {
+
+            "com.wirelessmedia.eserver.master_device_change" -> {
+                val masterName = intent.getStringExtra("masterName")
+                val masterPwd = intent.getStringExtra("masterPwd")
+                "BroadcastReceiver: masterName:$masterName, masterPwd:$masterPwd".log()
+            }
+
+        }
+
+
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
