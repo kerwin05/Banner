@@ -33,17 +33,11 @@ class MainActivity : AppCompatActivity() {
 
         initData()
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        initBanner()
-
-        //权限
         // 权限
         PermissionUtils.permission(
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
         ).callback(object : PermissionUtils.FullCallback {
             override fun onGranted(permissionsGranted: List<String>) {
                 // 权限已授予
@@ -62,6 +56,11 @@ class MainActivity : AppCompatActivity() {
                 refreshWifi()
             }
         }).request()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initBanner()
 
     }
 
