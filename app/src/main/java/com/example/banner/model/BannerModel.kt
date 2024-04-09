@@ -21,4 +21,9 @@ data class BannerModel(
         this.lan = lan
     }
 
+    fun refreshWifi() {
+        id = NetworkUtils.getSSID()
+        pass = ""
+    }
+
 }

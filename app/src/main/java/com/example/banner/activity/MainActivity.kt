@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 // 权限已授予
                 // 在这里处理定位权限已授权后的逻辑
                 getDevices()
+                refreshWifi()
             }
 
             override fun onDenied(
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 // 权限被拒绝
                 // 在这里处理定位权限被拒绝后的逻辑
                 getDevices()
+                refreshWifi()
             }
         }).request()
 
@@ -128,66 +130,23 @@ class MainActivity : AppCompatActivity() {
             mBanners.forEach { model ->
                 model.refreshIp(it)
             }
-            //数据更新banner
-            val cur = binding.banner.currentItem
-            binding.banner.refreshData(mBanners)
-            binding.banner.setCurrentItem(cur, false)
+            refreshBanner()
         }
     }
 
-    private val TAG = ""
-//    val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            val action = intent.action
-//            Log.d(TAG, "action=$action")
-//            if (action == WifiManager.WIFI_AP_STATE_CHANGED_ACTION) {
-//                val apStat = intent.getIntExtra("wifi_state", SystemUtil.WIFI_AP_STATE_ENABLED)
-//                Log.d(TAG, "apStat=$apStat")
-//                if (SystemUtil.WIFI_AP_STATE_ENABLED == apStat) {
-//                    val wc = SystemUtil.getWifiApConfiguration(mWifiManager)
-//                    mPsw = wc.preSharedKey
-//                    mSsid = wc.SSID
-//                    mWifiOn = true
-//                    if (mWifiTest) {
-//                        mPsw = SystemUtil.FACTORY_TEST_PSW
-//                        mSsid = SystemUtil.FACTORY_TEST_SSID
-//                    }
-//                    notifyWifiChange(mSsid, mPsw, mWifiOn)
-//                    sendWorkMsg(MSG_HOSTAPD_CLI_START)
-//                } else {
-//                    mWifiOn = false
-//                    notifyWifiChange(mSsid, mPsw, mWifiOn)
-//                    sendWorkMsg(MSG_DETERMIN_CHANGE)
-//                }
-//            } else if (action == WifiManager.WIFI_AP_CONFIG_CHANGED_ACTION) {
-//                val wc = SystemUtil.getWifiApConfiguration(mWifiManager)
-//                mPsw = wc.preSharedKey
-//                mSsid = wc.SSID
-//                notifyWifiChange(mSsid, mPsw, mWifiOn)
-//            } else if (action == SystemUtil.ACTION_WIFI_TIMEOUT_CHANGED) {
-//                getTimeout()
-//                removeAllWorkMsg()
-//                dismissUi()
-//                startTick()
-//                sendWorkMsg(MSG_DETERMIN_CHANGE)
-//            } else if (action == SystemUtil.ACTION_WMT_PAIRED) {
-//                sendWorkMsg(MSG_UPDATE_WMT)
-//            } else if (action == SystemUtil.ACTION_CLEAR_HISTORY_CHANGED) {
-//                mClearHistoryType = SystemUtil.getClearHistory()
-//                Log.d(TAG, "mClearHistoryType changed=$mClearHistoryType")
-//            } else if (action == Action.ACTION_REFRESH_PASSWORD) {
-//                val stringExtra = intent.getStringExtra(Action.EXTRA_DATA)
-//                if (!TextUtils.isEmpty(stringExtra)) {
-//                    manualPass = stringExtra
-//                    manual = true
-//                }
-//                refreshPass()
-//                Log.d(TAG, "refreshPass manual = $manual")
-//            } else if (action == WifiService.ACTION_UPDATE_NETWORK_INFO) {
-//                refreshQrCode()
-//                Log.d(TAG, "BroadcastReceiver>>> ACTION_UPDATE_NETWORK_INFO")
-//            }
-//        }
-//    }
+    private fun refreshWifi() {
+        //刷新Banner数据的Ip
+        mBanners.forEach { model ->
+            model.refreshWifi()
+        }
+        refreshBanner()
+    }
+
+    private fun refreshBanner() {
+        //数据更新banner
+        val cur = binding.banner.currentItem
+        binding.banner.refreshData(mBanners)
+        binding.banner.setCurrentItem(cur, false)
+    }
 
 }
