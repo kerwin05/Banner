@@ -64,12 +64,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDevices() {
-        DeviceUtil.getIdAndPass { id, pass ->
-            "DeviceUtil getIdAndPass id:${id}, pass:$pass".log()
-        }
-        DeviceUtil.getApSSIDAndPwd(this) { id, pass ->
-            "DeviceUtil getApSSIDAndPwd id:${id}, pass:$pass".log()
-        }
         val getCurrentWifiInfo = DeviceUtil.getCurrentWifiInfo(this)
         "DeviceUtil getCurrentWifiInfo id:${getCurrentWifiInfo.first}, pass:${getCurrentWifiInfo.second}".log()
     }
