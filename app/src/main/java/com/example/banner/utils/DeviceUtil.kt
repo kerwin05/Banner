@@ -104,22 +104,10 @@ object DeviceUtil {
     fun getCurrentWifiInfo(context: Context): Pair<String?, String?> {
         val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
-        val networkId = wifiInfo.networkId
 
-        val configuredNetworks = wifiManager.configuredNetworks
-        for (config in configuredNetworks) {
-            if (config.networkId == networkId) {
-                val ssid = removeQuotes(config.SSID)
-                val preSharedKey = removeQuotes(config.preSharedKey)
-                return Pair(ssid, preSharedKey)
-            }
-        }
-
-        return Pair(null, null)
-    }
-
-    private fun removeQuotes(text: String?): String? {
-        return text?.removeSurrounding("\"")
+        val ssid = wifiInfo.ssid.replace("\"", "")
+        val preSharedKey = ""
+        return Pair(ssid, preSharedKey)
     }
 
 }

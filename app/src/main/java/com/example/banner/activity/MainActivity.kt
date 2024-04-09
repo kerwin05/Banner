@@ -1,9 +1,11 @@
 package com.example.banner.activity
 
+import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.NetworkUtils
+import com.blankj.utilcode.util.PermissionUtils
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
@@ -30,12 +32,38 @@ class MainActivity : AppCompatActivity() {
         EventBus.getDefault().register(this)
 
         initData()
+
     }
 
     override fun onResume() {
         super.onResume()
         initBanner()
 
+        //权限
+        // 权限
+        PermissionUtils.permission(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ).callback(object : PermissionUtils.FullCallback {
+            override fun onGranted(permissionsGranted: List<String>) {
+                // 权限已授予
+                // 在这里处理定位权限已授权后的逻辑
+                getDevices()
+            }
+
+            override fun onDenied(
+                permissionsDeniedForever: List<String>,
+                permissionsDenied: List<String>
+            ) {
+                // 权限被拒绝
+                // 在这里处理定位权限被拒绝后的逻辑
+                getDevices()
+            }
+        }).request()
+
+    }
+
+    private fun getDevices() {
         DeviceUtil.getIdAndPass { id, pass ->
             "DeviceUtil getIdAndPass id:${id}, pass:$pass".log()
         }

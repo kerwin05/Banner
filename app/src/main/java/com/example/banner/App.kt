@@ -26,6 +26,7 @@ class App: Application() {
         //网络环境监听
         val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(networkChangeReceiver, intentFilter)
+
     }
 
 }
