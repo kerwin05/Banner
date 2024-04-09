@@ -1,4 +1,4 @@
-package com.example.banner.utils
+package com.example.banner.utils.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

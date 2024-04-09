@@ -3,7 +3,7 @@ package com.example.banner
 import android.app.Application
 import android.content.IntentFilter
 import android.net.ConnectivityManager
-import com.example.banner.utils.NetworkChangeReceiver
+import com.example.banner.utils.receiver.NetworkChangeReceiver
 import com.example.banner.utils.timberInit
 
 class App: Application() {

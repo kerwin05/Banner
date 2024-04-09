@@ -4,8 +4,6 @@ import java.net.NetworkInterface
 
 object IpUtils {
 
-
-
     fun getLocalIpAddress(): String {
         try {
             val interfaces = NetworkInterface.getNetworkInterfaces()
