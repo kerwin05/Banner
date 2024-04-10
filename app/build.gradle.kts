@@ -17,8 +17,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../platform.keystore") // 签名文件路径
+            storePassword = "android" // 签名文件密码
+            keyAlias = "platform" // 签名密钥别名
+            keyPassword = "android" // 签名密钥密码
+        }
+    }
+
     buildTypes {
         debug {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -26,6 +36,7 @@ android {
             )
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

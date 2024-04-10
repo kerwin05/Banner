@@ -1,14 +1,17 @@
 package com.example.banner.activity
 
+import android.content.Context
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.blankj.utilcode.util.NetworkUtils
+import com.example.banner.App
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.databinding.ActivityMainBinding
 import com.example.banner.model.BannerModel
-import com.example.banner.utils.DeviceUtil
 import com.example.banner.utils.eventbus.NetworkEvent
 import com.example.banner.utils.eventbus.WifiEvent
 import com.example.banner.utils.log
@@ -38,11 +41,17 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         initBanner()
 
-    }
+        try {
+            val wifiManager: WifiManager = App.getContext().getSystemService(Context.WIFI_SERVICE) as WifiManager// 获取WifiManager实例
+            val getWifiApConfigurationMethod = wifiManager.javaClass.getMethod("getWifiApConfiguration")
+            val wifiApConfiguration: WifiConfiguration = getWifiApConfigurationMethod.invoke(wifiManager) as WifiConfiguration
+            val id = wifiApConfiguration.SSID
+            val pass = wifiApConfiguration.preSharedKey
+            "wifiApConfiguration id:$id, pass:$pass".log()
+        } catch (e: Exception) {
+            "wifiApConfiguration error".log()
+        }
 
-    private fun getDevices() {
-        val getCurrentWifiInfo = DeviceUtil.getCurrentWifiInfo(this)
-        "DeviceUtil getCurrentWifiInfo id:${getCurrentWifiInfo.first}, pass:${getCurrentWifiInfo.second}".log()
     }
 
     private fun initBanner() {
