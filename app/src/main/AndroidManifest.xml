@@ -28,6 +28,18 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".utils.receiver.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.wirelessmedia.eserver.master_device_change" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
+
+
 
 </manifest>

@@ -10,6 +10,7 @@ import com.example.banner.databinding.ActivityMainBinding
 import com.example.banner.model.BannerModel
 import com.example.banner.utils.DeviceUtil
 import com.example.banner.utils.eventbus.NetworkEvent
+import com.example.banner.utils.eventbus.WifiEvent
 import com.example.banner.utils.log
 import com.zhpan.bannerview.transform.toPx
 import org.greenrobot.eventbus.EventBus
@@ -102,6 +103,18 @@ class MainActivity : AppCompatActivity() {
         refreshBannerIp()
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun rcvMsg(event: WifiEvent) {
+        //EvenBus收到网络改变的通知，刷新Banner显示的Wifi
+        NetworkUtils.getIPAddressAsync(true) {
+            //刷新Banner数据的Ip
+            mBanners.forEach { model ->
+                model.refreshWifi(event.id, event.pass)
+            }
+            refreshBanner()
+        }
+    }
+
     private fun refreshBannerIp() {
         NetworkUtils.getIPAddressAsync(true) {
             //刷新Banner数据的Ip
@@ -110,14 +123,6 @@ class MainActivity : AppCompatActivity() {
             }
             refreshBanner()
         }
-    }
-
-    private fun refreshWifi() {
-        //刷新Banner数据的Ip
-        mBanners.forEach { model ->
-            model.refreshWifi()
-        }
-        refreshBanner()
     }
 
     private fun refreshBanner() {

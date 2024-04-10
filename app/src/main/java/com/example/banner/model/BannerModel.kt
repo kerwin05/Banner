@@ -1,8 +1,6 @@
 package com.example.banner.model
 
 import com.blankj.utilcode.util.NetworkUtils
-import com.example.banner.App
-import com.example.banner.utils.DeviceUtil
 import com.example.banner.utils.IpUtils
 
 data class BannerModel(
@@ -23,9 +21,9 @@ data class BannerModel(
         this.lan = lan
     }
 
-    fun refreshWifi() {
-        id = NetworkUtils.getSSID()
-        pass = DeviceUtil.getCurrentWifiInfo(App.getContext()).first.toString()
+    fun refreshWifi(id: String, pass: String) {
+        this.id = id
+        this.pass = pass
     }
 
 }
