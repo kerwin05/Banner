@@ -14,7 +14,6 @@ import com.example.banner.model.BannerModel
 import com.example.banner.utils.IpUtils
 import com.example.banner.utils.eventbus.NetworkEvent
 import com.example.banner.utils.eventbus.WifiEvent
-import com.example.banner.utils.log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -26,16 +25,11 @@ import java.util.Locale
 
 class MainVM : ViewModel()  {
 
-    val mId = MutableLiveData("")
-    val mPass = MutableLiveData("")
-    val mWifi = MutableLiveData("")
-    val mLan = MutableLiveData("")
+    val mId = MutableLiveData("ID:")
+    val mPass = MutableLiveData("PASS:")
+    val mWifi = MutableLiveData("Wifi Ip:")
+    val mLan = MutableLiveData("Lan Ip:")
     val mTime = MutableLiveData("")
-
-    fun showId() :String = "ID:${mId.value}"
-    fun showPass(): String = "PASS:${mPass.value}"
-    fun showWifi(): String = "Wifi Ip:${mWifi.value}"
-    fun showLan(): String = "Lan Ip:${mLan.value}"
 
     lateinit var mAdapter: BannerAdapter
     val mBanners = ArrayList<BannerModel>()
@@ -43,26 +37,22 @@ class MainVM : ViewModel()  {
     init {
         EventBus.getDefault().register(this)
         initData()
+        initShowData()
         showTime()
     }
 
     private fun initShowData() {
         NetworkUtils.getIPAddressAsync(true) {
-            //刷新Banner数据的Ip
-            mWifi.value = IpUtils.getLocalIpAddress()
-            mLan.value = it
+            mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
+            mLan.value = "Lan Ip:$it"
         }
         try {
-
             val wifiManager: WifiManager = App.getContext().getSystemService(Context.WIFI_SERVICE) as WifiManager// 获取WifiManager实例
             val getWifiApConfigurationMethod = wifiManager.javaClass.getMethod("getWifiApConfiguration")
             val wifiApConfiguration: WifiConfiguration = getWifiApConfigurationMethod.invoke(wifiManager) as WifiConfiguration
-            mId.value = wifiApConfiguration.SSID
-            mPass.value = wifiApConfiguration.preSharedKey
-
-            "wifiApConfiguration id:${mId.value}, pass:${mPass.value}".log()
+            mId.value = "ID:${wifiApConfiguration.SSID}"
+            mPass.value = "PASS:${wifiApConfiguration.preSharedKey}"
         } catch (e: Exception) {
-            "wifiApConfiguration error".log()
         }
     }
 
@@ -97,17 +87,15 @@ class MainVM : ViewModel()  {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun rcvMsg(event: NetworkEvent) {
-        //EvenBus收到网络改变的通知，刷新Banner显示的Ip
+        NetworkUtils.getIPAddressAsync(true) {
+            mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
+            mLan.value = "Lan Ip:$it"
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun rcvMsg(event: WifiEvent) {
-        //EvenBus收到网络改变的通知，刷新Banner显示的Wifi
-        NetworkUtils.getIPAddressAsync(true) {
-            //刷新Banner数据的Ip
-            mWifi.value = IpUtils.getLocalIpAddress()
-            mLan.value = it
-        }
+
     }
 
     private fun showTime() {

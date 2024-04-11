@@ -43,7 +43,7 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     tools:text="ID:MTS-100SY-5098"
-                    android:text="@{vm.showId()}"/>
+                    android:text="@{vm.mId}"/>
 
                 <TextView
                     android:id="@+id/tv_pass"
@@ -52,7 +52,7 @@
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     tools:text="PASS:00000111"
-                    android:text="@{vm.showPass()}" />
+                    android:text="@{vm.mPass}" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 tools:text="Wifi Ip: 192.168.1.1"
-                android:text="@{vm.showWifi()}" />
+                android:text="@{vm.mWifi}" />
 
             <TextView
                 android:id="@+id/tv_lan"
@@ -97,7 +97,7 @@
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 tools:text="Lan Ip: 192.168.1.1"
-                android:text="@{vm.showLan()}"/>
+                android:text="@{vm.mLan}"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
