@@ -37,11 +37,10 @@ class MainVM : ViewModel()  {
     init {
         EventBus.getDefault().register(this)
         initData()
-        initShowData()
         showTime()
     }
 
-    private fun initShowData() {
+    fun initShowData() {
         NetworkUtils.getIPAddressAsync(true) {
             mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
             mLan.value = "Lan Ip:$it"

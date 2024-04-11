@@ -25,6 +25,7 @@ class MainActivity : BaseDataBindingActivity<ActivityMainBinding>() {
     override fun onResume() {
         super.onResume()
         initBanner()
+        viewModel.initShowData()
     }
 
     private fun initBanner() {
