@@ -7,9 +7,6 @@ import com.example.banner.databinding.ItemBannerBinding
 import com.example.banner.model.BannerModel
 import com.zhpan.bannerview.BaseBannerAdapter
 import com.zhpan.bannerview.BaseViewHolder
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class BannerAdapter(private val context: Context) :
     BaseBannerAdapter<BannerModel, BannerAdapter.BannerViewHolder>() {
@@ -42,19 +39,8 @@ class BannerAdapter(private val context: Context) :
             position: Int,
             pageSize: Int
         ) {
-            bind.tvTime.text = getCurTime()
             bind.ivBg.setImageResource(data.img)
-            bind.tvId.text = data.showId()
-            bind.tvPass.text = data.showPass()
-            bind.tvWifi.text = data.showWifi()
-            bind.tvLan.text = data.showLan()
         }
-    }
-
-    fun getCurTime(): String {
-        val currentTime = Date()
-        val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        return dateFormat.format(currentTime)
     }
 
 }

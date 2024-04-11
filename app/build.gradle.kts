@@ -54,6 +54,8 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
+        dataBinding = true
     }
 
     viewBinding {
@@ -74,4 +76,6 @@ dependencies {
     implementation("com.blankj:utilcodex:1.30.6")
     implementation("com.jakewharton.timber:timber:4.7.1")
     implementation("org.greenrobot:eventbus:3.3.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$2.4.0-rc01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$2.4.0-rc01")
 }
