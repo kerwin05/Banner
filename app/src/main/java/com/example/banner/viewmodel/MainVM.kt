@@ -108,10 +108,9 @@ class MainVM : ViewModel()  {
     fun onClickRefreshPass() {
         SystemProperties.get("sys.str.enter", "")
         SystemProperties.set("sys.str.enter", "")
-        NetworkUtils.getIPAddressAsync(true) {
-            mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
-            mLan.value = "Lan Ip:$it"
-        }
+        val mPair = IpUtils.getIdAndPass()
+        mId.value = mPair.first
+        mPass.value = mPair.second
     }
 
 }
