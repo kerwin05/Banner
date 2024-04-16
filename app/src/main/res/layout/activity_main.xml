@@ -45,14 +45,28 @@
                     tools:text="ID:MTS-100SY-5098"
                     android:text="@{vm.mId}"/>
 
-                <TextView
-                    android:id="@+id/tv_pass"
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    tools:text="PASS:00000111"
-                    android:text="@{vm.mPass}" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_pass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        tools:text="PASS:00000111"
+                        android:text="@{vm.mPass}" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_marginStart="24dp"
+                        android:onClick="@{() -> vm.onClickRefreshPass()}"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -1,13 +1,10 @@
 package com.example.banner.viewmodel
 
-import android.content.Context
-import android.net.wifi.WifiConfiguration
-import android.net.wifi.WifiManager
+import android.os.SystemProperties
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
-import com.example.banner.App
 import com.example.banner.R
 import com.example.banner.adapter.BannerAdapter
 import com.example.banner.model.BannerModel
@@ -37,22 +34,18 @@ class MainVM : ViewModel()  {
     init {
         EventBus.getDefault().register(this)
         initData()
+        initShowData()
         showTime()
     }
 
-    fun initShowData() {
+    private fun initShowData() {
         NetworkUtils.getIPAddressAsync(true) {
             mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
             mLan.value = "Lan Ip:$it"
         }
-        try {
-            val wifiManager: WifiManager = App.getContext().getSystemService(Context.WIFI_SERVICE) as WifiManager// 获取WifiManager实例
-            val getWifiApConfigurationMethod = wifiManager.javaClass.getMethod("getWifiApConfiguration")
-            val wifiApConfiguration: WifiConfiguration = getWifiApConfigurationMethod.invoke(wifiManager) as WifiConfiguration
-            mId.value = "ID:${wifiApConfiguration.SSID}"
-            mPass.value = "PASS:${wifiApConfiguration.preSharedKey}"
-        } catch (e: Exception) {
-        }
+        val mPair = IpUtils.getIdAndPass()
+        mId.value = mPair.first
+        mPass.value = mPair.second
     }
 
     //初始化数据，后续可以将图片更改为从文件拿
@@ -110,6 +103,15 @@ class MainVM : ViewModel()  {
         val currentTime = Date()
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return dateFormat.format(currentTime)
+    }
+
+    fun onClickRefreshPass() {
+        SystemProperties.get("sys.str.enter", "")
+        SystemProperties.set("sys.str.enter", "")
+        NetworkUtils.getIPAddressAsync(true) {
+            mWifi.value = "Wifi Ip:${IpUtils.getLocalIpAddress()}"
+            mLan.value = "Lan Ip:$it"
+        }
     }
 
 }
