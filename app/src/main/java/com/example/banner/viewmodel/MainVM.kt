@@ -26,7 +26,7 @@ class MainVM : ViewModel()  {
 
     val mId = MutableLiveData("ID:")
     val mPass = MutableLiveData("PASS:")
-    val mCountdown = MutableLiveData("(05:00)")
+    val mCountdown = MutableLiveData("")
     val mWifi = MutableLiveData("Wifi Ip:")
     val mLan = MutableLiveData("Lan Ip:")
     val mTime = MutableLiveData("")
