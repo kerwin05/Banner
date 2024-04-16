@@ -46,4 +46,36 @@ object IpUtils {
         return Pair("", "")
     }
 
+    fun setPass() {
+        val psw = (1000 + Math.random() * (9999 - 1000 + 1)).toInt()
+        val mPsw = "0000$psw"
+
+        try {
+            val wifiManager: WifiManager = App.getContext()
+                .getSystemService(Context.WIFI_SERVICE) as WifiManager// 获取WifiManager实例
+
+            val wifiConfigurationClass = WifiConfiguration::class.java
+            val setWifiApConfigurationMethod = WifiManager::class.java.getDeclaredMethod(
+                "setWifiApConfiguration",
+                wifiConfigurationClass
+            )
+            val refreshSoftApPasswordMethod = WifiManager::class.java.getDeclaredMethod(
+                "refreshSoftApPassword",
+                wifiConfigurationClass
+            )
+
+            // 创建WifiConfiguration对象（根据您的需求进行设置）
+            val wifiConfiguration = WifiConfiguration()
+            // 设置WifiConfiguration的相关属性
+            wifiConfiguration.preSharedKey = mPsw
+            // 调用setWifiApConfiguration方法
+            setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)
+            // 调用refreshSoftApPassword方法
+            refreshSoftApPasswordMethod.invoke(wifiManager, wifiConfiguration)
+        } catch (e: Exception) {
+
+        }
+
+    }
+
 }

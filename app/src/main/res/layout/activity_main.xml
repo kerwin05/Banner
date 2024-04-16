@@ -48,7 +48,8 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/tv_pass"
@@ -59,10 +60,19 @@
                         tools:text="PASS:00000111"
                         android:text="@{vm.mPass}" />
 
+                    <TextView
+                        android:id="@+id/tv_countdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        tools:text="(05:00)"
+                        android:text="@{vm.mCountdown}" />
+
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@mipmap/ic_launcher"
+                        android:src="@drawable/refresh"
                         android:layout_marginStart="24dp"
                         android:onClick="@{() -> vm.onClickRefreshPass()}"/>
 

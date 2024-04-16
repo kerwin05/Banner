@@ -1,6 +1,6 @@
 package com.example.banner.viewmodel
 
-import android.os.SystemProperties
+import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,8 +22,11 @@ import java.util.Locale
 
 class MainVM : ViewModel()  {
 
+    private val mCountDownTime = (5 * 60 * 1000).toLong()
+
     val mId = MutableLiveData("ID:")
     val mPass = MutableLiveData("PASS:")
+    val mCountdown = MutableLiveData("(05:00)")
     val mWifi = MutableLiveData("Wifi Ip:")
     val mLan = MutableLiveData("Lan Ip:")
     val mTime = MutableLiveData("")
@@ -36,6 +39,7 @@ class MainVM : ViewModel()  {
         initData()
         initShowData()
         showTime()
+        startCountdownTimer(mCountDownTime)
     }
 
     private fun initShowData() {
@@ -106,11 +110,30 @@ class MainVM : ViewModel()  {
     }
 
     fun onClickRefreshPass() {
-        SystemProperties.get("sys.str.enter", "")
-        SystemProperties.set("sys.str.enter", "")
+        startCountdownTimer(mCountDownTime) // 倒计时完毕后重新开始5分钟倒计时
+
+        IpUtils.setPass()
         val mPair = IpUtils.getIdAndPass()
         mId.value = mPair.first
         mPass.value = mPair.second
+    }
+
+    private lateinit var countdownTimer: CountDownTimer
+    private fun startCountdownTimer(durationMillis: Long) {
+        countdownTimer = object : CountDownTimer(durationMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = (millisUntilFinished / 1000) / 60
+                val seconds = (millisUntilFinished / 1000) % 60
+                val timeString = String.format("(%02d:%02d)", minutes, seconds)
+                mCountdown.value = timeString
+            }
+
+            override fun onFinish() {
+                onClickRefreshPass()
+            }
+        }
+
+        countdownTimer.start()
     }
 
 }
