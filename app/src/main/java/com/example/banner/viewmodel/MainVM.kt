@@ -22,7 +22,7 @@ import java.util.Locale
 
 class MainVM : ViewModel()  {
 
-    private val mCountDownTime = (5 * 60 * 1000).toLong()
+    private val mCountDownTime = ((5 * 60 + 1) * 1000).toLong()
 
     val mId = MutableLiveData("ID:")
     val mPass = MutableLiveData("PASS:")
