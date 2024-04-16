@@ -64,9 +64,11 @@ object IpUtils {
                 wifiConfigurationClass
             )
 
+            val mId = getIdAndPass().first
             // 创建WifiConfiguration对象（根据您的需求进行设置）
             val wifiConfiguration = WifiConfiguration()
             // 设置WifiConfiguration的相关属性
+            wifiConfiguration.SSID = mId
             wifiConfiguration.preSharedKey = mPsw
             // 调用setWifiApConfiguration方法
             setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)

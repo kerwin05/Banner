@@ -110,6 +110,7 @@ class MainVM : ViewModel()  {
     }
 
     fun onClickRefreshPass() {
+        countdownTimer.cancel()
         startCountdownTimer(mCountDownTime) // 倒计时完毕后重新开始5分钟倒计时
 
         IpUtils.setPass()
