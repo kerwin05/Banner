@@ -59,10 +59,6 @@ object IpUtils {
                 "setWifiApConfiguration",
                 wifiConfigurationClass
             )
-            val refreshSoftApPasswordMethod = WifiManager::class.java.getDeclaredMethod(
-                "refreshSoftApPassword",
-                wifiConfigurationClass
-            )
 
             val mId = getIdAndPass().first.replace("ID:","")
             // 创建WifiConfiguration对象（根据您的需求进行设置）
