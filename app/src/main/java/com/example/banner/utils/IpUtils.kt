@@ -72,7 +72,8 @@ object IpUtils {
             wifiConfiguration.SSID = mId
             wifiConfiguration.preSharedKey = mPsw
             // 调用setWifiApConfiguration方法
-            setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)// 调用refreshSoftApPassword方法
+            setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)
+            // 调用refreshSoftApPassword方法
             refreshSoftApPasswordMethod.invoke(wifiManager, wifiConfiguration)
         } catch (e: Exception) {
 
