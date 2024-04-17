@@ -54,6 +54,7 @@ object IpUtils {
             val wifiManager: WifiManager = App.getContext()
                 .getSystemService(Context.WIFI_SERVICE) as WifiManager// 获取WifiManager实例
 
+
             val wifiConfigurationClass = WifiConfiguration::class.java
             val setWifiApConfigurationMethod = WifiManager::class.java.getDeclaredMethod(
                 "setWifiApConfiguration",
@@ -61,13 +62,15 @@ object IpUtils {
             )
 
             val mId = getIdAndPass().first.replace("ID:","")
-            // 创建WifiConfiguration对象（根据您的需求进行设置）
+            // 创建WifiConfiguration对象
             val wifiConfiguration = WifiConfiguration()
             // 设置WifiConfiguration的相关属性
             wifiConfiguration.SSID = mId
             wifiConfiguration.preSharedKey = mPsw
             // 调用setWifiApConfiguration方法
             setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)
+            wifiManager.isWifiEnabled = false
+            wifiManager.isWifiEnabled = true
         } catch (e: Exception) {
 
         }
