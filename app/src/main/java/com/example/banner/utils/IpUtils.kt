@@ -60,6 +60,10 @@ object IpUtils {
                 "setWifiApConfiguration",
                 wifiConfigurationClass
             )
+            val refreshSoftApPasswordMethod = WifiManager::class.java.getDeclaredMethod(
+                "refreshSoftApPassword",
+                wifiConfigurationClass
+            )
 
             val mId = getIdAndPass().first.replace("ID:","")
             // 创建WifiConfiguration对象
@@ -68,9 +72,8 @@ object IpUtils {
             wifiConfiguration.SSID = mId
             wifiConfiguration.preSharedKey = mPsw
             // 调用setWifiApConfiguration方法
-            setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)
-            wifiManager.isWifiEnabled = false
-            wifiManager.isWifiEnabled = true
+            setWifiApConfigurationMethod.invoke(wifiManager, wifiConfiguration)// 调用refreshSoftApPassword方法
+            refreshSoftApPasswordMethod.invoke(wifiManager, wifiConfiguration)
         } catch (e: Exception) {
 
         }
